@@ -5,98 +5,150 @@
  */
 package miproyectoid3;
 
+import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.DefaultCellEditor;
+import java.util.ArrayList;
 
 /**
  *
  * @author IVAN
  */
 public class principal extends javax.swing.JFrame {
-   Object[] []datos = {};
+    Object[] []datos = {};
     String [] ColumNames  = {};
-DefaultTableModel dtm= new DefaultTableModel(datos,ColumNames);
-  int filas = 0;
-  int columnas= 0;
-   public principal() {
-          
+    DefaultTableModel dtm= new DefaultTableModel(datos,ColumNames);
+    int filas = 0;
+    int columnas= 0;
+   
+    public principal() {
         initComponents();
-        
+        jTabbedPane1.setEnabledAt(1, false);
+        jTabbedPane1.setEnabledAt(2, false);
+        jTabbedPane1.setEnabledAt(3, false);
+        jButton3.setEnabled(false);
+        jButtonCompletado.setEnabled(false);
+        jButton1.setEnabled(false);
+        jButton4.setEnabled(false);
     }
    
-   public static void reiniciarJTable(JTable table){
+    public static void reiniciarJTable(JTable table){
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
         while(modelo.getRowCount()>0)modelo.removeRow(0);
  
         TableColumnModel modCol = table.getColumnModel();
         while(modCol.getColumnCount()>0)modCol.removeColumn(modCol.getColumn(0));
     }
-   public void agregar_fila_ejemplos(){
-       DefaultTableModel temp = (DefaultTableModel) jTableEjemplos.getModel();
-Object nuevo[]= {temp.getRowCount()+1,"",""};
-temp.addRow(nuevo);
-   }
-   public void agregar_fila(){
-       DefaultTableModel temp = (DefaultTableModel) jTablefACTORES.getModel();
-Object nuevo[]= {temp.getRowCount()+1,"",""};
-temp.addRow(nuevo);
-   }
+   
+    public void agregar_fila_ejemplos(){
+        DefaultTableModel temp = (DefaultTableModel) jTableEjemplos.getModel();
+        Object nuevo[]= {temp.getRowCount()+1,"",""};
+        temp.addRow(nuevo);
+    }
+   
+    public void agregar_fila(){
+        DefaultTableModel temp = (DefaultTableModel) jTablefACTORES.getModel();
+        Object nuevo[]= {"","",""};
+        temp.addRow(nuevo);
+    }
+
+    //Para cualquier tabla
+  /*  public void agregar_fila(DefaultTableModel tabla){
+        DefaultTableModel temp = tabla;
+        Object nuevo[]= {temp.getRowCount()+1,"",""};
+        temp.addRow(nuevo);
+    }*/
+    
+    //Para la tabla factores
     public void quitar_fila(){
-       try
-{
-DefaultTableModel temp = (DefaultTableModel) jTablefACTORES.getModel();
-temp.removeRow(temp.getRowCount()-1);
-}
-catch(ArrayIndexOutOfBoundsException e){;}
-   }
-  public void AgregarFactor(){
-      int k=0;         
-            ColumNames  = new String[]{  };
+        try
+        {
+            DefaultTableModel temp = (DefaultTableModel) jTablefACTORES.getModel();
+            temp.removeRow(temp.getRowCount()-1);
+        }
+        catch(ArrayIndexOutOfBoundsException e){ }
+    }
+  
+    //Para la tabla ejemplos
+    public void quitar_fila(int fila){
+        try{
+            DefaultTableModel temp = (DefaultTableModel) jTableEjemplos.getModel();
+            temp.removeRow(fila);
+        }
+        catch(ArrayIndexOutOfBoundsException e){ }
+    }
+    
+    public void AgregarFactor(){
+        int k=0;         
+        ColumNames  = new String[]{  };
         try {
             Object seleccion = JOptionPane.showInputDialog("Nombre del factor", JOptionPane.QUESTION_MESSAGE);
             dtm.addColumn(seleccion.toString().toUpperCase(),ColumNames);
-           // ColumNames[k]= colmna[k];
+            // ColumNames[k]= colmna[k];
             String fact = JOptionPane.showInputDialog("Ingrese un valor:",JOptionPane.QUESTION_MESSAGE);
-      int numeroresp =JOptionPane.CLOSED_OPTION;
-      dtm.addRow(new Object[filas]);
-      for (int i = 0; i < jTablefACTORES.getColumnCount()+1; i++) {
-                
-                   
-                    dtm.setValueAt(fact,k, filas);
-              
-                                 
-                }
-      // ColumNames[k]= (String) seleccion;
-                System.out.println(numeroresp);
+            int numeroresp =JOptionPane.CLOSED_OPTION;
+            //if(dtm.getColumnCount()==0)
+            if(dtm.getColumnCount()==1)
+                dtm.addRow(new Object[filas]);
+            for (int i = 0; i < jTablefACTORES.getColumnCount()+1; i++) {
+                dtm.setValueAt(fact,k, filas);
+            }
+            // ColumNames[k]= (String) seleccion;
+            System.out.println(numeroresp);
             jTablefACTORES.setModel(dtm);
-              if ((int)seleccion!=JOptionPane.CANCEL_OPTION) {
-          jButton3.setEnabled(true);
-      }
-        } catch (Exception e) {
-
+            if ((int)seleccion!=JOptionPane.CANCEL_OPTION) {
+                jButton3.setEnabled(true);
+            }
+        } catch (Exception e) { }
+        k++;
+        filas++;     
+    }
+ 
+    
+    public void combo(int num, Object[] DATA){
+        //String[] DATA = { "Dato 1", "Dato 2", "Dato 3", "Dato 4" };
+        JComboBox comboBox = new JComboBox(DATA);
+        DefaultCellEditor defaultCellEditor=new DefaultCellEditor(comboBox);
+        jTableEjemplos.getColumnModel().getColumn(num).setCellEditor(defaultCellEditor);
+    }
+    
+    public void pasarDatos(){
+        String [] ColumnEjemplos= new String[]{ } ;
+        Object datosEjemplos [][] = { };
+        DefaultTableModel ejemplosModel = new DefaultTableModel(datosEjemplos,ColumnEjemplos);
+        ejemplosModel.addColumn("numero", ColumnEjemplos);
+        for (int i = 0; i <= jTablefACTORES.getColumnCount()-1 ; i++) {
+            ejemplosModel.addColumn(jTablefACTORES.getColumnName(i), ColumnEjemplos);
+            //ColumnEjemplos  [i]= jTablefACTORES.getColumnName(i);
         }
-      k++;
-   filas++;     
-       
-          
-        
-  }
- public void pasarDatos(){
-     String [] ColumnEjemplos= new String[]{ } ;
-     Object datosEjemplos [][] = { };
-     DefaultTableModel ejemplosModel = new DefaultTableModel(datosEjemplos,ColumnEjemplos);
-    ejemplosModel.addColumn("numero", ColumnEjemplos);
-     for (int i = 0; i <= jTablefACTORES.getColumnCount()-1 ; i++) {
-         
-          ejemplosModel.addColumn(jTablefACTORES.getColumnName(i), ColumnEjemplos);
-         //ColumnEjemplos  [i]= jTablefACTORES.getColumnName(i);
-     }
-     ejemplosModel.addColumn("resultados", ColumnEjemplos);
-     jTableEjemplos.setModel(ejemplosModel);
- }
+        ejemplosModel.addColumn("resultados", ColumnEjemplos);
+        jTableEjemplos.setModel(ejemplosModel);
+        agregar_fila_ejemplos();
+       // String[] Datos=new String[jTablefACTORES.getRowCount()];
+        ArrayList Datos=new ArrayList();
+        try{
+            for(int i=0; i<jTablefACTORES.getColumnCount(); i++){
+                System.out.println("En la columna "+jTablefACTORES.getColumnName(i));
+                for(int j=0;j<jTablefACTORES.getRowCount();j++){
+                    System.out.println("  Valor: "+jTablefACTORES.getValueAt(j, i));
+                    if(!jTablefACTORES.getValueAt(j, i).equals(""))
+                        Datos.add(jTablefACTORES.getValueAt(j, i));
+                }
+                System.out.println(Datos);
+                combo(i+1, Datos.toArray());
+                Datos.removeAll(Datos);    
+            }
+            Datos.add(jTableResultados.getValueAt(0, 0));
+            Datos.add(jTableResultados.getValueAt(1, 0));
+            combo(jTableEjemplos.getColumnCount()-1, Datos.toArray());
+        } catch(Exception e){
+            System.out.println(e);
+        };
+    }
         
   
     /**
@@ -132,7 +184,11 @@ catch(ArrayIndexOutOfBoundsException e){;}
         jTableEjemplos = new javax.swing.JTable();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        btnElimEjem = new javax.swing.JButton();
+        btnNuevoEjem = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTree1 = new javax.swing.JTree();
         jPanel7 = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -147,6 +203,12 @@ catch(ArrayIndexOutOfBoundsException e){;}
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ID3");
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jTablefACTORES.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -156,6 +218,11 @@ catch(ArrayIndexOutOfBoundsException e){;}
 
             }
         ));
+        jTablefACTORES.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTablefACTORESKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTablefACTORES);
 
         jTableResultados.setModel(new javax.swing.table.DefaultTableModel(
@@ -170,16 +237,9 @@ catch(ArrayIndexOutOfBoundsException e){;}
             Class[] types = new Class [] {
                 java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false
-            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
         });
         jScrollPane2.setViewportView(jTableResultados);
@@ -255,29 +315,28 @@ catch(ArrayIndexOutOfBoundsException e){;}
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)))
+                        .addComponent(jButton4))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Definiciones", jPanel2);
@@ -296,48 +355,79 @@ catch(ArrayIndexOutOfBoundsException e){;}
         jScrollPane3.setViewportView(jTableEjemplos);
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+
+        btnElimEjem.setText("Eliminar");
+        btnElimEjem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnElimEjemActionPerformed(evt);
+            }
+        });
+
+        btnNuevoEjem.setText("Nuevo");
+        btnNuevoEjem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoEjemActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGap(34, 34, 34)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnNuevoEjem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnElimEjem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGuardar)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCancelar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(59, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE))
+                .addGap(52, 52, 52))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnGuardar))
-                .addGap(129, 129, 129))
+                    .addComponent(btnGuardar)
+                    .addComponent(btnElimEjem)
+                    .addComponent(btnNuevoEjem))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ejemplos", jPanel5);
+
+        jScrollPane4.setViewportView(jTree1);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(256, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 196, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Regla", jPanel6);
@@ -346,11 +436,11 @@ catch(ArrayIndexOutOfBoundsException e){;}
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
+            .addGap(0, 542, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 196, Short.MAX_VALUE)
+            .addGap(0, 205, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Prueba", jPanel7);
@@ -365,8 +455,8 @@ catch(ArrayIndexOutOfBoundsException e){;}
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -387,9 +477,14 @@ catch(ArrayIndexOutOfBoundsException e){;}
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      AgregarFactor(); 
-                 
-      
+        AgregarFactor();
+        if(jTablefACTORES.getColumnCount()==1){
+            jButtonCompletado.setEnabled(true);
+            jButton3.setEnabled(true);
+            jButton1.setEnabled(true);
+            jButton4.setEnabled(true);
+        }
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -399,38 +494,72 @@ catch(ArrayIndexOutOfBoundsException e){;}
             System.out.println("columna ! ="+ i +" nombre: "+ColumNames[i]);
         }
         try {
-           
-    
             JComboBox<String> combo = new JComboBox<>(ColumNames);
+            String[] options = { "OK", "Cancel" };
 
-      String[] options = { "OK", "Cancel" };
-
-      String title = "Title";
-      int selection = JOptionPane.showOptionDialog(null, combo, title,
+            String title = "Title";
+            int selection = JOptionPane.showOptionDialog(null, combo, title,
             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
             options, options[0]);
 
-      if (selection > 0) {
-         System.out.println("selection is: " + options[selection]);
-      }
+            if (selection > 0) {
+                System.out.println("selection is: " + options[selection]);
+            }
 
-      Object weekday = combo.getSelectedItem();
+            Object weekday = combo.getSelectedItem();
             jTablefACTORES.getColumnModel().removeColumn(jTablefACTORES.getColumnModel().getColumn((int) weekday));
         } catch (Exception e) {
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-agregar_fila();        // TODO add your handling code here:
+        agregar_fila();  
+        if(!jButtonCompletado.isEnabled())
+            jButtonCompletado.setEnabled(true);
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-quitar_fila();        // TODO add your handling code here:
+        quitar_fila();        // TODO add your handling code here:    
+        if(jTablefACTORES.getRowCount()==0){
+            jButtonCompletado.setEnabled(false);
+        };
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    
     private void jButtonCompletadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompletadoActionPerformed
-pasarDatos();        // TODO add your handling code here:
+        pasarDatos();        // TODO add your handling code here:
+        jTabbedPane1.setEnabledAt(1, true);
+        jTabbedPane1.setSelectedIndex(1);
+        
+        
     }//GEN-LAST:event_jButtonCompletadoActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formKeyPressed
+
+    private void jTablefACTORESKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTablefACTORESKeyTyped
+       /* if(evt.getKeyChar() == KeyEvent.VK_ENTER){
+            agregar_fila();
+        } */       // TODO add your handling code here:
+    }//GEN-LAST:event_jTablefACTORESKeyTyped
+
+    private void btnNuevoEjemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEjemActionPerformed
+        agregar_fila_ejemplos();        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNuevoEjemActionPerformed
+
+    private void btnElimEjemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimEjemActionPerformed
+        System.out.println("La fila es: " + jTableEjemplos.getSelectedRow());
+        quitar_fila(jTableEjemplos.getSelectedRow());
+        
+    }//GEN-LAST:event_btnElimEjemActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        jTabbedPane1.setEnabledAt(2, true);
+        jTabbedPane1.setEnabledAt(3, true);
+        jTabbedPane1.setSelectedIndex(2);        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -469,7 +598,9 @@ pasarDatos();        // TODO add your handling code here:
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnElimEjem;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnNuevoEjem;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -485,9 +616,11 @@ pasarDatos();        // TODO add your handling code here:
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableEjemplos;
     private javax.swing.JTable jTableResultados;
     private javax.swing.JTable jTablefACTORES;
+    private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 }
