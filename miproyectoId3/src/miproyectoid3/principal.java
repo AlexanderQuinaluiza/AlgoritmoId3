@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package id3aq;
+package miproyectoid3;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
@@ -547,8 +547,14 @@ public class principal extends javax.swing.JFrame {
 
     private void btnElimEjemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimEjemActionPerformed
         System.out.println("La fila es: " + jTableEjemplos.getSelectedRow());
-        quitar_fila(jTableEjemplos.getSelectedRow());
-        
+        int seguro = JOptionPane.showConfirmDialog(null, 
+                     "Está seguro que desa eliminar este ejemplo?",null, JOptionPane.YES_NO_OPTION);
+        if(seguro == JOptionPane.YES_OPTION) {
+            quitar_fila(jTableEjemplos.getSelectedRow());
+            for(int i=0;i<jTableEjemplos.getRowCount();i++){
+                jTableEjemplos.setValueAt(i+1, i, 0);
+            }
+        }
     }//GEN-LAST:event_btnElimEjemActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
