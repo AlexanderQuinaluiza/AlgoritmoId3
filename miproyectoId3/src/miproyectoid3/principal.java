@@ -485,10 +485,13 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        for (int i = 0; i < ColumNames.length; i++) {
-            System.out.println("columna ! ="+ i +" nombre: "+ColumNames[i]);
-        }
-        try {
+        int colum=jTablefACTORES.getSelectedColumn();
+        int result = JOptionPane.showConfirmDialog(null, 
+                     "Seguro que desea eliminar este factor?",null, JOptionPane.YES_NO_OPTION);
+        if(result == JOptionPane.YES_OPTION) {
+            jTablefACTORES.removeColumn(jTablefACTORES.getColumnModel().getColumn(colum));
+        } 
+     /*   try {
             
             JComboBox<String> combo = new JComboBox<>(ColumNames);
             String[] options = { "OK", "Cancel" };
@@ -505,7 +508,7 @@ public class principal extends javax.swing.JFrame {
             Object weekday = combo.getSelectedItem();
             jTablefACTORES.getColumnModel().removeColumn(jTablefACTORES.getColumnModel().getColumn((int) weekday));
         } catch (Exception e) {
-        }        
+        }   */     
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
