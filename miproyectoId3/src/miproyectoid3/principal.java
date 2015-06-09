@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package id3aq;
+package miproyectoid3;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
