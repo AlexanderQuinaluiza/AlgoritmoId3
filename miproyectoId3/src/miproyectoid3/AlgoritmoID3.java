@@ -25,7 +25,7 @@ public class AlgoritmoID3 {
 			this.datos=datos; 
 		// Variables
 		String resArbol="";
-		Object[] arbolMenorDP=new Object[datos[0].length-1];
+		Object[] arbolMenorDP=new Object[datos[0].length-2];
 		int nt=datos.length,dpMenor = 0,porc=0;
 		double porcMenor=0;
 		Object arbol1[][],arbol2[][];

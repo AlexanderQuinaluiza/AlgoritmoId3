@@ -24,6 +24,7 @@ public class principal extends javax.swing.JFrame {
     DefaultTableModel dtm= new DefaultTableModel(datos,ColumNames);
     int filas = 0;
     int columnas= 0;
+    Object datosEjemplos [][] = { };
    
     public principal() {
         initComponents();
@@ -94,6 +95,7 @@ public class principal extends javax.swing.JFrame {
         
         filas++;  
     }
+   
  
     
     public void combo(int num, Object[] DATA){
@@ -105,7 +107,7 @@ public class principal extends javax.swing.JFrame {
     
     public void pasarDatos(){
         String [] ColumnEjemplos= new String[]{ } ;
-        Object datosEjemplos [][] = { };
+        //Object datosEjemplos [][] = { };
         DefaultTableModel ejemplosModel = new DefaultTableModel(datosEjemplos,ColumnEjemplos);
         ejemplosModel.addColumn("numero", ColumnEjemplos);
         for (int i = 0; i <= jTablefACTORES.getColumnCount()-1 ; i++) {
@@ -124,9 +126,10 @@ public class principal extends javax.swing.JFrame {
                     System.out.println("  Valor: "+jTablefACTORES.getValueAt(j, i));
                     if(!jTablefACTORES.getValueAt(j, i).toString().equals(""))
                         Datos.add(jTablefACTORES.getValueAt(j, i));
-                }
+             }
                 System.out.println(Datos);
                 combo(i+1, Datos.toArray());
+                //combo_result(i+1, Datos.toArray());
                 Datos.removeAll(Datos);    
             }
             Datos.add(jTableResultados.getValueAt(0, 0));
@@ -135,6 +138,9 @@ public class principal extends javax.swing.JFrame {
         } catch(Exception e){
             System.out.println(e);
         };
+    }
+    public void datos_for_id3(){
+        
     }
         
   
@@ -563,7 +569,26 @@ public class principal extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         jTabbedPane1.setEnabledAt(2, true);
         jTabbedPane1.setEnabledAt(3, true);
-        jTabbedPane1.setSelectedIndex(2);        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(2);  
+        AlgoritmoID3 Alg_id3 =new AlgoritmoID3();
+        int column = jTableEjemplos.getColumnCount()-1;
+        int fila= jTableEjemplos.getRowCount();
+        //tomamos solo los datos en una nuevo object
+        Object Ejemplos [][] = new Object[column][fila];
+        for (int i = 1; i < jTableEjemplos.getColumnCount(); i++) {
+            for (int j = 0; j < jTableEjemplos.getRowCount(); j++) {
+                Ejemplos [i-1][j]= jTableEjemplos.getValueAt(j, i);
+            }
+            
+        }
+        Alg_id3.id3(Ejemplos, 0);
+        String v[][]=Alg_id3.formarReglas();
+		
+		for (String[] strings : v) {
+			for (String string : strings) {
+				System.out.print(string+" ");
+			}System.out.println();
+                        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtFactorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFactorKeyTyped
