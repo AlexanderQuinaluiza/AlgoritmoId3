@@ -59,7 +59,7 @@ public class Operaciones extends Conexion{
         ResultSet resultado = null;
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        String sql = "select * from playa";
+        String sql = "select * from empresa";
         try {
             resultado = consultar(sql);
             if(resultado != null){

@@ -7,6 +7,7 @@ package miproyectoid3;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -34,8 +35,8 @@ public class AlgoritmoID3 {
 		// Inicializa las matrices auxiliar
 		arbol1=new Object[datos[0].length-1][noElementos(datos)];
 		arbol2=new Object[datos[0].length-1][noElementos(datos)];
-		
-		//System.err.println("Filas "+arbol1.length+" columnas "+arbol1[0].length);
+		          
+		          System.out.println("Filas "+arbol1.length+" columnas "+arbol1[0].length);
 		
 		for (int i = 0; i < datos[0].length-1; i++) {
 			for (int j = 0; j < datos.length; j++) {
@@ -71,13 +72,13 @@ public class AlgoritmoID3 {
 				
 			}System.out.println();
 		}
-		/*System.out.println("\n\n Arbol 2");
+		System.out.println("\n\n Arbol 2");
 		for (int i = 0; i < arbol2.length; i++) {
 			for (int k = 0; k < arbol2[i].length; k++) {
 				
 				System.out.print(arbol2[i][k]+"  ");
 			}System.out.println();
-		}*/
+		}
 		// Busca el menor valor
 		List<Double> dps=dp(arbol2, nt);
 		
@@ -248,7 +249,7 @@ public class AlgoritmoID3 {
 						cond1=datos[j][si1].toString();
 						cond2=datos[j][si2].toString();
 						sol1=datos[j][datos[0].length-1].toString();
-						respuestas.add(si1+" "+cond1+" "+si2+" "+cond2+" "+sol1);
+						respuestas.add(si1+"if"+cond1+" "+si2+" "+cond2+" "+sol1);
 					}
 					
 					
@@ -308,6 +309,10 @@ public class AlgoritmoID3 {
 			}
 			return total;
 		}
+        public void interpretacion_id3(){
+            String resul= "if then entonces";
+        } 
+        
 
 	
 	/*###########################################################################################################################

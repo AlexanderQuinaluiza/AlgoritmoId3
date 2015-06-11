@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.DefaultCellEditor;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -37,6 +38,7 @@ public class principal extends javax.swing.JFrame {
     public principal() {
         
         initComponents();
+        
         jTabbedPane1.setEnabledAt(1, false);
         jTabbedPane1.setEnabledAt(2, false);
         jTabbedPane1.setEnabledAt(3, false);
@@ -594,7 +596,7 @@ public class principal extends javax.swing.JFrame {
         AlgoritmoID3 Alg_id3 =new AlgoritmoID3();
         int column = jTableEjemplos.getColumnCount()-1;
         int fila= jTableEjemplos.getRowCount();
-        //tomamos solo los datos en una nuevo object
+        //tomamos solo los datos en un object
         Object Ejemplos [][] = new Object[column][fila];
         for (int i = 1; i < jTableEjemplos.getColumnCount(); i++) {
             for (int j = 0; j < jTableEjemplos.getRowCount(); j++) {
@@ -602,12 +604,24 @@ public class principal extends javax.swing.JFrame {
             }
             
         }
+        //podemos tomar la condicional entre 1-0
+        // 0 es positivo 
+        //1 es negativo.
         Alg_id3.id3(Ejemplos, 0);
+        jTextArea1.append("mi regla es" + "\n");
         String v[][]=Alg_id3.formarReglas();
-		
-		for (String[] strings : v) {
-			for (String string : strings) {
-				jTextArea1.setText(string);
+		if(!Alg_id3.respuesta.isEmpty()) { //persona es tu arraylist o list
+    Iterator iterador = Alg_id3.respuesta.listIterator(); //el objeto iterador te ayuda a recorrer una coleccion.
+    while(iterador.hasNext()) {
+        jTextArea1.append(iterador.next() + "\n"); //el objeto at es un JTextArea y el método append agrega el contenido de persona al area de texto
+    }
+}
+		for (String[] reglas : v) {
+			for (String string : reglas) {
+                            
+
+				jTextArea1.append(" " +reglas+ " " + string);
+                                jTextArea1.append(System.getProperty("line.separator"));
 			}System.out.println();
                         }
     }//GEN-LAST:event_btnGuardarActionPerformed
