@@ -6,6 +6,11 @@
 package miproyectoid3;
 
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -13,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.DefaultCellEditor;
 import java.util.ArrayList;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
@@ -25,8 +31,11 @@ public class principal extends javax.swing.JFrame {
     int filas = 0;
     int columnas= 0;
     Object datosEjemplos [][] = { };
+    private ResultSetMetaData rsm;
    
+    
     public principal() {
+        
         initComponents();
         jTabbedPane1.setEnabledAt(1, false);
         jTabbedPane1.setEnabledAt(2, false);
@@ -36,6 +45,7 @@ public class principal extends javax.swing.JFrame {
         jButton1.setEnabled(false);
         jButton4.setEnabled(false);
     }
+    
    
     public static void reiniciarJTable(JTable table){
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
@@ -139,9 +149,7 @@ public class principal extends javax.swing.JFrame {
             System.out.println(e);
         };
     }
-    public void datos_for_id3(){
-        
-    }
+   
         
   
     /**
@@ -180,9 +188,10 @@ public class principal extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnElimEjem = new javax.swing.JButton();
         btnNuevoEjem = new javax.swing.JButton();
+        jButtonEjemplo = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel7 = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -380,6 +389,13 @@ public class principal extends javax.swing.JFrame {
             }
         });
 
+        jButtonEjemplo.setText("Cargar Ejemplo");
+        jButtonEjemplo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEjemploActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -392,6 +408,8 @@ public class principal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnElimEjem)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonEjemplo)
+                        .addGap(18, 18, 18)
                         .addComponent(btnGuardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCancelar))
@@ -408,29 +426,32 @@ public class principal extends javax.swing.JFrame {
                     .addComponent(btnCancelar)
                     .addComponent(btnGuardar)
                     .addComponent(btnElimEjem)
-                    .addComponent(btnNuevoEjem))
+                    .addComponent(btnNuevoEjem)
+                    .addComponent(jButtonEjemplo))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ejemplos", jPanel5);
 
-        jScrollPane4.setViewportView(jTree1);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane4.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(376, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(434, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Regla", jPanel6);
@@ -586,7 +607,7 @@ public class principal extends javax.swing.JFrame {
 		
 		for (String[] strings : v) {
 			for (String string : strings) {
-				System.out.print(string+" ");
+				jTextArea1.setText(string);
 			}System.out.println();
                         }
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -603,6 +624,13 @@ public class principal extends javax.swing.JFrame {
             txtFactor.setText("");
         }
     }//GEN-LAST:event_txtFactorKeyTyped
+
+    private void jButtonEjemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEjemploActionPerformed
+       
+      Operaciones op = new Operaciones();
+     op.ejemploPlaya((DefaultTableModel)jTableEjemplos.getModel());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonEjemploActionPerformed
 
     /**
      * @param args the command line arguments
@@ -649,6 +677,7 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButtonCompletado;
+    private javax.swing.JButton jButtonEjemplo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -664,7 +693,7 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JTable jTableEjemplos;
     private javax.swing.JTable jTableResultados;
     private javax.swing.JTable jTablefACTORES;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField txtFactor;
     // End of variables declaration//GEN-END:variables
 }
